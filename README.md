@@ -37,7 +37,7 @@ CIS 150 project. A flappy-bird clone built with [SFML](https://github.com/SFML/S
    ```
  * Clone the repo and cd into it:
    ```shell
-   git clone https://github.com/mazzensaadd/fnf.git && cd fnf
+   git clone https://github.com/Omar-Yasser/fnf.git && cd fnf
    ```
  * Compile and run:
    ```shell
