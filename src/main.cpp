@@ -39,10 +39,10 @@ int main()
         {
 
             // reset to default
-            pipeRate = 150, gap = 225, flappy.isAlive = 1, frames = 0;
+            pipeRate = 150, gap = 225, gnu.isAlive = 1, frames = 0;
             isPaused = false, pauseSoundPlayed = false, highscoreSoundPlayed = false, checkedHighscore = false, firstTime = false;
-            flappy.x = 150, flappy.y = 200, flappy.velocity = 0;
-            flappy.sprite.setPosition(flappy.x, flappy.y);
+            gnu.x = 150, gnu.y = 200, gnu.velocity = 0;
+            gnu.sprite.setPosition(gnu.x, gnu.y);
             pipes.clear();
             markedPipes.clear();
 
@@ -53,7 +53,7 @@ int main()
                 if (event.key.code == Keyboard::Key::Escape)
                 {
                     //stop sounds while playing if the user pressed the escape button
-                    flappy.collide.stop();
+                    gnu.collide.stop();
                     isGameover = false;
                     isHighscore = false;
                 }
@@ -70,8 +70,8 @@ int main()
             if (!isPaused)
             {
                 // stop sound
-                flappy.collide.stop();
-                flappy.pauseSound.stop();
+                gnu.collide.stop();
+                gnu.pauseSound.stop();
                 pauseSoundPlayed = false;
 
                 // easy
@@ -113,15 +113,6 @@ int main()
                     (*itr).move(-3, 0);
                 }
 
-                // animate bird
-                if (frames % 30 == 0)
-                {
-                    flappy.texCounter += 1;
-                    flappy.texCounter = flappy.texCounter == 4 ? 0 : flappy.texCounter;
-                }
-
-                flappy.sprite.setTexture(flappy.texture[flappy.texCounter]);
-
                 // remove pipes offscreen
                 if (frames % 100 == 0)
                 {
@@ -144,8 +135,8 @@ int main()
                 for (auto i : pipes)
                 {
                     float px, py, pw, ph;
-                    float fx = flappy.sprite.getPosition().x, fy = flappy.sprite.getPosition().y;
-                    float fw = 34.0 * flappy.sprite.getScale().x, fh = 24.0 * flappy.sprite.getScale().y; // bird width and high scaled
+                    float fx = gnu.sprite.getPosition().x, fy = gnu.sprite.getPosition().y;
+                    float fw = 250.0 * gnu.sprite.getScale().x, fh = 253.0 * gnu.sprite.getScale().y; // bird width and high scaled
 
                     px = i.getPosition().x;
                     pw = 150 * i.getScale().x; // pipe width scaled
@@ -163,35 +154,36 @@ int main()
                     // check colliding and ground
                     if (isColliding(fx, fy, fw, fh, px, py, pw, ph) || hitGround(fy))
                     {
-                        flappy.isAlive = false;
+                        gnu.isAlive = false;
                         // Save Highscore before closing
                         Highscore(score, userHighScore, gameLevel, isHighscore);
                     }
                 }
 
                 // stop game and return to main menu
-                if (!flappy.isAlive)
+                if (!gnu.isAlive)
                 {
                     gameLevel = gameStates[3]; // Over
-                    flappy.isAlive = 0;
-                    flappy.highscoreSound.stop(); // dont mix sounds
-                    flappy.collide.play();
+                    gnu.isAlive = 0;
+                    gnu.highscoreSound.stop(); // dont mix sounds
+                    gnu.flap.stop();
+                    gnu.collide.play();
                     isGameover = true;
                     continue;
                 }
 
                 // gravity effect
-                if (flappy.isAlive)
+                if (gnu.isAlive)
                 {
-                    flappy.velocity += flappy.gravAcc;
-                    flappy.sprite.move(0, flappy.velocity);
+                    gnu.velocity += gnu.gravAcc;
+                    gnu.sprite.move(0, gnu.velocity);
                 }
 
                 // draw bird and pipes
 
                 window.clear();
                 window.draw(background);
-                window.draw(flappy.sprite);
+                window.draw(gnu.sprite);
 
                 for (auto i : pipes)
                 {
@@ -218,14 +210,14 @@ int main()
                 //  play highscore sound
                 if (isHighscore && !highscoreSoundPlayed && !firstTime)
                 {
-                    flappy.highscoreSound.play();
+                    gnu.highscoreSound.play();
                     highscoreSoundPlayed = true;
                 }
                 // calculate score
                 for (int i = 0; i < pipes.size(); i++)
                 {
                     // check if bird position exceeds pipe position + its scaled width to increment score
-                    if (flappy.sprite.getPosition().x + 34.0 * flappy.sprite.getScale().x > pipes[i].getPosition().x + 150.0 * pipes[i].getScale().x && !markedPipes[i] && !markedPipes[i + 1])
+                    if (gnu.sprite.getPosition().x + 34.0 * gnu.sprite.getScale().x > pipes[i].getPosition().x + 150.0 * pipes[i].getScale().x && !markedPipes[i] && !markedPipes[i + 1])
                     {
                         score++;
                         markedPipes[i] = 1, markedPipes[i + 1] = 1; // mark pipes
@@ -240,19 +232,19 @@ int main()
             else
             {
                 // Pause sound when gamae is paused
-                if (flappy.highscoreSound.getStatus() == SoundSource::Playing)
-                    flappy.highscoreSound.pause();
+                if (gnu.highscoreSound.getStatus() == SoundSource::Playing)
+                    gnu.highscoreSound.pause();
 
                 if (!pauseSoundPlayed)
                 {
-                    flappy.pauseSound.play();
+                    gnu.pauseSound.play();
                     pauseSoundPlayed = 1;
                 }
                 // Pause
                 window.clear();
                 window.draw(background);
                 displayScore(window, score);
-                window.draw(flappy.sprite);
+                window.draw(gnu.sprite);
                 for (auto i : pipes)
                 {
                     window.draw(i);

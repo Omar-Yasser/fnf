@@ -28,17 +28,17 @@ void handleEvent(RenderWindow &window, Event &event, bool &isPaused, bool &isGam
                 isMuted = !isMuted;
                 if (isMuted)
                 {
-                    flappy.collide.setVolume(0);
-                    flappy.flap.setVolume(0);
-                    flappy.highscoreSound.setVolume(0);
-                    flappy.pauseSound.setVolume(0);
+                    gnu.collide.setVolume(0);
+                    gnu.flap.setVolume(0);
+                    gnu.highscoreSound.setVolume(0);
+                    gnu.pauseSound.setVolume(0);
                 }
                 else
                 {
-                    flappy.collide.setVolume(100);
-                    flappy.flap.setVolume(10);
-                    flappy.highscoreSound.setVolume(100);
-                    flappy.pauseSound.setVolume(100);
+                    gnu.collide.setVolume(100);
+                    gnu.flap.setVolume(10);
+                    gnu.highscoreSound.setVolume(100);
+                    gnu.pauseSound.setVolume(100);
                 }
             }
             // Quit
@@ -60,7 +60,7 @@ void handleEvent(RenderWindow &window, Event &event, bool &isPaused, bool &isGam
                 else if (Keyboard::isKeyPressed(Keyboard::Escape))
                 {
                     gameLevel = gameStates[3];    // Over
-                    flappy.highscoreSound.stop(); // stop high score sound if it was playing
+                    gnu.highscoreSound.stop(); // stop high score sound if it was playing
                     isPaused = false;
                     isHighscore = false;
                 }
@@ -70,21 +70,21 @@ void handleEvent(RenderWindow &window, Event &event, bool &isPaused, bool &isGam
                 }
             }
             break;
-        // flappy Motion
+        // gnu Motion
         case Event::KeyReleased:
             if (event.key.code == Keyboard::Key::Up)
             {
                 // if isPaused and IsGameover flags are true ignore the Up command
                 if (gameLevel != gameStates[3] && !isPaused && !isGameover)
                 {
-                    flappy.velocity = flappy.jumpAcc;
+                    gnu.velocity = gnu.jumpAcc;
                     // Prevent going out of frame
-                    if (flappy.sprite.getPosition().y + flappy.velocity < 0)
-                        flappy.sprite.move(0, -flappy.sprite.getPosition().y);
+                    if (gnu.sprite.getPosition().y + gnu.velocity < 0)
+                        gnu.sprite.move(0, -gnu.sprite.getPosition().y);
                     else
-                        flappy.sprite.move(0, flappy.velocity);
+                        gnu.sprite.move(0, gnu.velocity);
 
-                    flappy.flap.play();
+                    gnu.flap.play();
                 }
             }
             break;
@@ -121,10 +121,10 @@ void displayBackground(RenderWindow &window)
 void displayIntroBird(RenderWindow &window)
 {
     Texture bird;
-    bird.loadFromFile("assets/bird-mid.png");
+    bird.loadFromFile("assets/gnu.png");
     Sprite flappyBird(bird);
-    flappyBird.setPosition(WID - 35, HEI + 200);
-    flappyBird.setScale(2.5f, 2.5f);
+    flappyBird.setPosition(WID - 50, HEI + 200);
+    flappyBird.setScale(0.5f, 0.5f);
     window.draw(flappyBird);
 }
 

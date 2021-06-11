@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 using namespace sf;
-struct Flappy
+struct gnu
 {
     float x = 150, y = 200, velocity = 0;
     bool isAlive = 1;
@@ -15,11 +15,10 @@ struct Flappy
     SoundBuffer highscoreBuffer, pauseBuffer;
     Sound highscoreSound, pauseSound;
     Sound flap, collide;
-    Texture texture[4];
-    int texCounter = 0;
+    Texture texture;
 };
 
-Flappy flappy;
+gnu gnu;
 
 bool isColliding(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2)
 {
@@ -37,21 +36,18 @@ bool hitGround(float y)
 
 void loadFlappy()
 {
-    flappy.texture[0].loadFromFile("assets/bird-mid.png"); // add animation
-    flappy.texture[1].loadFromFile("assets/bird-up.png");
-    flappy.texture[2].loadFromFile("assets/bird-mid.png");
-    flappy.texture[3].loadFromFile("assets/bird-down.png");
-    flappy.sprite.setScale(2.0f, 2.0f);
-    flappy.sprite.setTexture(flappy.texture[1]);
-    flappy.sprite.setPosition(flappy.x, flappy.y);
-    flappy.flapBuffer.loadFromFile("audio/flap.wav");
-    flappy.flap.setBuffer(flappy.flapBuffer);
-    flappy.flap.setVolume(10);
-    flappy.collideBuffer.loadFromFile("audio/gameover.wav");
-    flappy.collide.setBuffer(flappy.collideBuffer);
-    flappy.highscoreBuffer.loadFromFile("audio/highscore.wav");
-    flappy.highscoreSound.setBuffer(flappy.highscoreBuffer);
-    flappy.pauseBuffer.loadFromFile("audio/pause.wav");
-    flappy.pauseSound.setBuffer(flappy.pauseBuffer);
+    gnu.texture.loadFromFile("assets/gnu.png");
+    gnu.sprite.setScale(0.3f, 0.3f);
+    gnu.sprite.setTexture(gnu.texture);
+    gnu.sprite.setPosition(gnu.x, gnu.y);
+    gnu.flapBuffer.loadFromFile("audio/flap.wav");
+    gnu.flap.setBuffer(gnu.flapBuffer);
+    gnu.flap.setVolume(10);
+    gnu.collideBuffer.loadFromFile("audio/gameover.wav");
+    gnu.collide.setBuffer(gnu.collideBuffer);
+    gnu.highscoreBuffer.loadFromFile("audio/highscore.wav");
+    gnu.highscoreSound.setBuffer(gnu.highscoreBuffer);
+    gnu.pauseBuffer.loadFromFile("audio/pause.wav");
+    gnu.pauseSound.setBuffer(gnu.pauseBuffer);
 }
 #endif // bird_H
